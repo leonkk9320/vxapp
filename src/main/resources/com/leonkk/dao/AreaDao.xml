@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.leonkk.dao.AreaDao">
+    <resultMap id="queryMap" type="Area">
+        <result  column="area_id" property="areaId"/>
+        <result  column="area_name" property="areaName"/>
+        <result  column="last_edit_time" property="lastEditTime"/>
+    </resultMap>
+
+    <select id="queryAreaAll" resultMap="queryMap">
+        SELECT * FROM demovx.tb_area
+        ORDER BY priority
+            DESC;
+    </select>
+
+    <select id="queryAreaById" resultMap="queryMap">
+        SELECT * FROM demovx.tb_area WHERE area_id = #{areaId}
+    </select>
+
+    <insert id="insertArea" useGeneratedKeys="true" parameterType="area">
+        INSERT INTO demovx.tb_area(area_name, priority, create_time, last_edit_time) VALUES
+            (#{areaName}, #{priority}, #{createTime}, #{lastEditTime});
+    </insert>
+
+    <update id="updateArea" parameterType="area">
+        UPDATE demovx.tb_area
+        <set>
+            <if test="areaName != null">area_name = #{areaName},</if>
+            <if test="priority != null">priority = #{priority},</if>
+            <if test="lastEditTime != null">last_edit_time = #{lastEditTime}</if>
+        </set>
+        WHERE area_id = #{areaId}
+    </update>
+
+    <delete id="deleteArea" parameterType="int">
+        DELETE FROM demovx.tb_area
+        WHERE area_id = #{areaId};
+    </delete>
+</mapper>
